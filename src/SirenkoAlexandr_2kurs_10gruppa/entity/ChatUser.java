@@ -1,35 +1,36 @@
 package SirenkoAlexandr_2kurs_10gruppa.entity;
 
-import java.io.IOException;
-import java.util.Calendar;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import com.company.entity.ChatMessage;
-import com.company.entity.ChatUser;
-
-public class NewMessageServlet extends ChatServlet {
-    private static final long serialVersionUID = 1L;
-    protected void doPost(HttpServletRequest request, HttpServletResponse
-            response) throws ServletException, IOException {
-        // По умолчанию используется кодировка ISO-8859. Так как мы
-        // передаѐм данные в кодировке UTF-8
-        // то необходимо установить соответствующую кодировку HTTP-запроса
-        request.setCharacterEncoding("UTF-8");
-        // Извлечь из HTTP-запроса параметр 'message'
-        String message = (String)request.getParameter("message");
-        // Если сообщение не пустое, то
-        if (message!=null && !"".equals(message)) {
-            // По имени из сессии получить ссылку на объект ChatUser
-            ChatUser author = activeUsers.get((String)
-                    request.getSession().getAttribute("name"));
-            synchronized (messages) {
-                // Добавить в список сообщений новое
-                messages.add(new ChatMessage(message, author,
-                        Calendar.getInstance().getTimeInMillis()));
-            }
-        }
-        // Перенаправить пользователя на страницу с формой сообщения
-        response.sendRedirect("/labaehkere8_war_exploded/compose_message.htm");
+public class ChatUser {
+    // Имя пользователя
+    // Имя пользователя
+    private String name;
+    // Последнее время взаимодействия с сервером в количестве микросекунд,
+// прошедших с 1 января 1970 года
+    private long lastInteractionTime;
+    // Идентификатор Java-сессии пользователя
+    private String sessionId;
+    public ChatUser(String name,long lastInteractionTime,String sessionId) {
+        super();
+        this.name = name;
+        this.lastInteractionTime = lastInteractionTime;
+        this.sessionId = sessionId;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public long getLastInteractionTime() {
+        return lastInteractionTime;
+    }
+    public void setLastInteractionTime(long lastInteractionTime) {
+        this.lastInteractionTime = lastInteractionTime;
+    }
+    public String getSessionId() {
+        return sessionId;
+    }
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 }
